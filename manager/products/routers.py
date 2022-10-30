@@ -10,7 +10,7 @@ from database import get_db
 import uuid, shutil
 
 router = APIRouter(
-    tags=['Admin Products'],
+    tags=['Manage Products'],
     prefix='/admin/products',
     dependencies=[Depends(get_current_user_admin)],
 )

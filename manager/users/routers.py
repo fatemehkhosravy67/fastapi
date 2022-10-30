@@ -7,8 +7,8 @@ from typing import List
 
 
 router = APIRouter(
-    tags=['Admin Accounts'],
-    prefix='/admin/accounts',
+    tags=['Manage Users'],
+    prefix='/admin/users',
     dependencies=[Depends(get_current_user_admin)],
 )
 
