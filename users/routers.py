@@ -12,8 +12,7 @@ import jwt
 import settings
 
 router = APIRouter(
-    tags=['Users'],
-    prefix='/users'
+    tags=['Users']
 )
 
 

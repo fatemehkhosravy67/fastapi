@@ -9,8 +9,7 @@ from carts.cart import Cart
 
 
 router = APIRouter(
-    tags=['Orders'],
-    prefix='/orders'
+    tags=['Orders']
 )
 
 

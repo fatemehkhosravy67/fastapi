@@ -10,8 +10,7 @@ from users.schemas import User
 
 
 router = APIRouter(
-    tags=['Carts'],
-    prefix='/carts'
+    tags=['Carts']
 )
 
 
