@@ -82,3 +82,5 @@ async def change_password(data: schemas.ChangePassword, user: schemas.User = Dep
         user.save()
         return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "User change password."})
     return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message": "Old password is incorrect."})
+
+

@@ -5,7 +5,7 @@ from fastapi import HTTPException, Depends, status
 from . import models
 from .utils import Hash
 import settings
-
+from users.auth_bearer import JWTBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
@@ -22,7 +22,19 @@ def authenticate_user(email: str, password: str):
     return user
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
+# def get_current_user(token: str = Depends(oauth2_scheme)):
+#     try:
+#         payload = jwt.decode(token, settings.JWT_SECRET, algorithms=['HS256'])
+#         user = models.User.filter(models.User.id == payload.get('id')).first()
+#     except:
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail='Invalid email or password'
+#         )
+#
+#     return user
+
+def get_current_user(token: str = Depends(JWTBearer())):
     try:
         payload = jwt.decode(token, settings.JWT_SECRET, algorithms=['HS256'])
         user = models.User.filter(models.User.id == payload.get('id')).first()
@@ -35,7 +47,25 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-def get_current_user_admin(token: str = Depends(oauth2_scheme)):
+# def get_current_user_admin(token: str = Depends(oauth2_scheme)):
+#     try:
+#         payload = jwt.decode(token, settings.JWT_SECRET, algorithms=['HS256'])
+#         user = models.User.filter(models.User.id == payload.get('id')).first()
+#         if user.is_admin == False:
+#             raise HTTPException(
+#                 status_code=status.HTTP_401_UNAUTHORIZED,
+#                 detail='Protected'
+#             )
+#
+#     except:
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail='Invalid email or password'
+#         )
+#
+#     return user
+
+def get_current_user_admin(token: str = Depends(JWTBearer())):
     try:
         payload = jwt.decode(token, settings.JWT_SECRET, algorithms=['HS256'])
         user = models.User.filter(models.User.id == payload.get('id')).first()

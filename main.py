@@ -16,7 +16,11 @@ from products.routers import router as products_routers
 
 from manager.products.routers import router as admin_products_routers
 from manager.users.routers import router as admin_users_routers
+from fastapi import FastAPI, Body, Depends
 
+from users.models import UserSchema, UserLoginSchema
+from users.auth_bearer import JWTBearer
+from users.auth_handler import signJWT
 from database import db_state_default
 import database
 
@@ -78,3 +82,27 @@ app.include_router(router=products_routers, prefix="/api/v1/products", tags=["Pr
 app.include_router(router=orders_routers, prefix="/api/v1/orders", tags=["Orders"])
 app.include_router(router=admin_products_routers, prefix="/api/v1/admin/products", tags=["Manage Products"])
 app.include_router(router=admin_users_routers, prefix="/api/v1/admin/users", tags=["Manage Users"])
+
+users = []
+
+
+@app.post("/user/signup", tags=["user"])
+async def create_user(user: UserSchema = Body(...)):
+    users.append(user)  # replace with db call, making sure to hash the password first
+    return signJWT(user.email)
+
+
+def check_user(data: UserLoginSchema):
+    for user in users:
+        if user.email == data.email and user.password == data.password:
+            return True
+    return False
+
+
+@app.post("/user/login", tags=["user"])
+async def user_login(user: UserLoginSchema = Body(...)):
+    if check_user(user):
+        return signJWT(user.email)
+    return {
+        "error": "Wrong login details!"
+    }
